@@ -34,7 +34,7 @@ class MainActivity : AppCompatActivity() {
         //  3. find the created item in the list and show key
         //  4. set key string bellow
         //
-        private val key = "===PLEASE ENTER YOUR KEY HERE==="
+        private val key = "zv8SLRfY1dKZoGicYNAxdiENkQRuFf3d3mJB1TNQsFOA3PPhoEzoDICfdG9K42vq2wrcKX56So9bIra2AN2kat2FiDx2vdMXoebDbl6pAvtv1rM8P2YKF6DDvIAIvov4n26tKWVtVEyIN0rY1dhaDsBIycBSxlthGRrCYdw5uZaHS71j5M7MZbSqkq1BXllIjCJtMlVL"
     }
 
     private var glView: GLView? = null
@@ -54,8 +54,8 @@ class MainActivity : AppCompatActivity() {
 
         requestCameraPermission(object : PermissionCallback {
             override fun onSuccess() {
-//                findViewById<FrameLayout>(R.id.preview).addView(glView, ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT))
-                findViewById<FrameLayout>(R.id.preview).addView(smartGlView, ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT))
+                findViewById<FrameLayout>(R.id.preview).addView(glView, ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT))
+//                findViewById<FrameLayout>(R.id.preview).addView(smartGlView, ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT))
             }
 
             override fun onFailure() {}
