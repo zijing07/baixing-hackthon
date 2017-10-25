@@ -19,7 +19,7 @@ import javax.microedition.khronos.egl.EGLDisplay
 import javax.microedition.khronos.opengles.GL10
 
 class GLView(context: Context) : GLSurfaceView(context) {
-    private val helloAR: HelloAR
+    val helloAR: HelloAR
 
     init {
         setEGLContextFactory(ContextFactory())

@@ -55,7 +55,7 @@ class MainActivity : AppCompatActivity() {
         requestCameraPermission(object : PermissionCallback {
             override fun onSuccess() {
                 findViewById<FrameLayout>(R.id.preview).addView(glView, ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT))
-//                findViewById<FrameLayout>(R.id.preview).addView(smartGlView, ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT))
+                findViewById<FrameLayout>(R.id.preview).addView(smartGlView, ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT))
             }
 
             override fun onFailure() {}
@@ -105,15 +105,13 @@ class MainActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        if (glView != null) {
-            glView!!.onResume()
-        }
+        glView?.onResume()
+        smartGlView?.onResume()
     }
 
     override fun onPause() {
-        if (glView != null) {
-            glView!!.onPause()
-        }
+        glView?.onPause()
+        smartGlView?.onPause()
         super.onPause()
     }
 
