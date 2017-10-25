@@ -19,7 +19,9 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.ViewGroup
 import android.view.WindowManager
+import android.widget.FrameLayout
 import cn.easyar.Engine
+import cn.easyar.samples.helloar.smartgl.BXSmartGLView
 
 class MainActivity : AppCompatActivity() {
     companion object {
@@ -36,6 +38,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private var glView: GLView? = null
+    private var smartGlView: BXSmartGLView? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,10 +50,12 @@ class MainActivity : AppCompatActivity() {
         }
 
         glView = GLView(this)
+        smartGlView = BXSmartGLView(this)
 
         requestCameraPermission(object : PermissionCallback {
             override fun onSuccess() {
-                (findViewById(R.id.preview) as ViewGroup).addView(glView, ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT))
+//                findViewById<FrameLayout>(R.id.preview).addView(glView, ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT))
+                findViewById<FrameLayout>(R.id.preview).addView(smartGlView, ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT))
             }
 
             override fun onFailure() {}

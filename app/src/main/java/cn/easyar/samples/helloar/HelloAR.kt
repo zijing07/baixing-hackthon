@@ -11,17 +11,18 @@ package cn.easyar.samples.helloar
 import android.opengl.GLES20
 import android.util.Log
 import cn.easyar.*
+import fr.arnaudguyon.smartgl.opengl.SmartGLView
 
-class HelloAR {
-    private var camera: CameraDevice? = null
-    private var streamer: CameraFrameStreamer? = null
-    private val trackers = ArrayList<ImageTracker>()
-    private var videobg_renderer: Renderer? = null
-    private var box_renderer: BoxRenderer? = null
-    private var viewport_changed = false
-    private var view_size = Vec2I(0, 0)
-    private var rotation = 0
-    private var viewport = Vec4I(0, 0, 1280, 720)
+open class HelloAR {
+    var camera: CameraDevice? = null
+    var streamer: CameraFrameStreamer? = null
+    val trackers = ArrayList<ImageTracker>()
+    var videobg_renderer: Renderer? = null
+    var box_renderer: BoxRenderer? = null
+    var viewport_changed = false
+    var view_size = Vec2I(0, 0)
+    var rotation = 0
+    var viewport = Vec4I(0, 0, 1280, 720)
 
     private fun loadFromImage(tracker: ImageTracker, path: String) {
         val target = ImageTarget()
