@@ -1,37 +1,35 @@
 package cn.easyar.samples.helloar.smartgl
 
 import android.content.Context
+import cn.easyar.samples.helloar.HelloAR
 import cn.easyar.samples.helloar.R
-import fr.arnaudguyon.smartgl.opengl.SmartGLView
-import fr.arnaudguyon.smartgl.opengl.SmartGLViewController
 import fr.arnaudguyon.smartgl.touch.TouchHelperEvent
-import fr.arnaudguyon.smartgl.opengl.RenderPassSprite
-import fr.arnaudguyon.smartgl.opengl.RenderPassObject3D
-import fr.arnaudguyon.smartgl.opengl.Sprite
-import fr.arnaudguyon.smartgl.opengl.Texture
-import fr.arnaudguyon.smartgl.opengl.LightParallel
 import fr.arnaudguyon.smartgl.math.Vector3D
-import fr.arnaudguyon.smartgl.opengl.SmartColor
+import fr.arnaudguyon.smartgl.opengl.*
 import fr.arnaudguyon.smartgl.tools.WavefrontModel
-import fr.arnaudguyon.smartgl.opengl.LightAmbiant
-
 
 
 /**
  * Created by zijing on 25/10/2017
  */
 class BXSmartGLView(context: Context) : SmartGLView(context), SmartGLViewController {
-
     init {
+        // smart gl init
         controller = this
         setDefaultRenderer(context)
-
-        smartGLRenderer.setClearColor(0.01f, 0.01f, 0.1f, 1f)
-
-        val lightAmbiant = LightAmbiant(0.2f, 0.2f, 0.2f)
+        smartGLRenderer.setClearColor(0.01f, 0.01f, 0.1f, 0f)
+        val lightAmbiant = LightAmbiant(1f, 1f, 1f)
         smartGLRenderer.setLightAmbiant(lightAmbiant)
+
+        // easy ar init
     }
 
+    var helloAR: HelloAR? = null
+    constructor(context: Context, ar: HelloAR?): this(context) {
+        helloAR = ar
+    }
+
+    var mObject3D: Object3D? = null
     val mRenderPassObject3D = RenderPassObject3D(RenderPassObject3D.ShaderType.SHADER_TEXTURE_LIGHTS, true, true)
     val mRenderPassObject3DColor = RenderPassObject3D(RenderPassObject3D.ShaderType.SHADER_COLOR, true, false)
     val mRenderPassSprite = RenderPassSprite()
@@ -40,6 +38,8 @@ class BXSmartGLView(context: Context) : SmartGLView(context), SmartGLViewControl
     val mObjectTexture = Texture(context, R.drawable.space_cruiser_4_color)
 
     val mSprite = Sprite(120, 120)
+
+    var objectRotation = 0f
 
     override fun onPrepareView(glView: fr.arnaudguyon.smartgl.opengl.SmartGLView?) {
         // Add RenderPass for Sprites & Object3D
@@ -67,9 +67,10 @@ class BXSmartGLView(context: Context) : SmartGLView(context), SmartGLViewControl
         val model = WavefrontModel.Builder(context, R.raw.space_ship)
                 .addTexture("", mObjectTexture)
                 .create()
-        val mObject3D = model.toObject3D()
-        mObject3D.setScale(0.2f, 0.2f, 0.2f)
-        mObject3D.setPos(0f, 0f, -7f)
+        mObject3D = model.toObject3D()
+        mObject3D?.setScale(0.08f, 0.08f, 0.08f)
+        mObject3D?.setPos(0f, 0f, -5f)
+        mObject3D?.setRotation(120f, 50f, 120f)
         mRenderPassObject3D.addObject(mObject3D)
     }
 
@@ -79,6 +80,10 @@ class BXSmartGLView(context: Context) : SmartGLView(context), SmartGLViewControl
     }
 
     override fun onTick(glView: fr.arnaudguyon.smartgl.opengl.SmartGLView?) {
+        val renderer = glView?.smartGLRenderer
+        renderer ?: return
+        objectRotation += renderer.frameDuration * 10
+        mObject3D?.setRotation(objectRotation, objectRotation, objectRotation)
     }
 
     override fun onResizeView(p0: fr.arnaudguyon.smartgl.opengl.SmartGLView?) {

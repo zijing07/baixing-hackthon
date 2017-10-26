@@ -9,11 +9,14 @@
 package cn.easyar.samples.helloar
 
 import android.opengl.GLES20
+import android.opengl.GLU
 import android.util.Log
+import android.view.ViewGroup
+import android.widget.TextView
 import cn.easyar.*
 import fr.arnaudguyon.smartgl.opengl.SmartGLView
 
-open class HelloAR {
+open class HelloAR() {
     var camera: CameraDevice? = null
     var streamer: CameraFrameStreamer? = null
     val trackers = ArrayList<ImageTracker>()
@@ -23,6 +26,7 @@ open class HelloAR {
     var view_size = Vec2I(0, 0)
     var rotation = 0
     var viewport = Vec4I(0, 0, 1280, 720)
+    lateinit var textView: TextView
 
     private fun loadFromImage(tracker: ImageTracker, path: String) {
         val target = ImageTarget()
@@ -181,6 +185,25 @@ open class HelloAR {
                 if (status == TargetStatus.Tracked) {
                     val target = targetInstance.target()
                     val imagetarget = target as? ImageTarget ?: continue
+
+
+                    val projectionMatrix = camera!!.projectionGL(0.2f, 500f).data
+                    val modelViewMatrix = targetInstance.poseGL().data
+                    val viewArray = kotlin.IntArray(4)
+                    val windowArray = FloatArray(4)
+
+                    GLU.gluProject(0f, 0f, 0f,
+                            modelViewMatrix, 0, projectionMatrix, 0,
+                            viewport.data, 0, windowArray, 0)
+
+                    textView.post {
+                        val layoutParams = textView.layoutParams as ViewGroup.MarginLayoutParams
+                        layoutParams.leftMargin = windowArray[0].toInt()
+                        layoutParams.topMargin = viewport.data[3] - windowArray[1].toInt()
+                        Log.d("ABC", windowArray.joinToString(","))
+                        textView.layoutParams = layoutParams
+                    }
+
                     box_renderer?.render(camera!!.projectionGL(0.2f, 500f), targetInstance.poseGL(), imagetarget.size())
                 }
             }

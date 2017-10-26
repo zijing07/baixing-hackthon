@@ -11,6 +11,8 @@ package cn.easyar.samples.helloar
 import android.Manifest
 import android.annotation.TargetApi
 import android.content.pm.PackageManager
+import android.graphics.Color
+import android.graphics.Typeface
 import android.os.Build
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
@@ -20,6 +22,7 @@ import android.view.MenuItem
 import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.FrameLayout
+import android.widget.TextView
 import cn.easyar.Engine
 import cn.easyar.samples.helloar.smartgl.BXSmartGLView
 
@@ -38,7 +41,11 @@ class MainActivity : AppCompatActivity() {
     }
 
     private var glView: GLView? = null
-    private var smartGlView: BXSmartGLView? = null
+//    private var smartGlView: BXSmartGLView? = null
+
+    private val textView: TextView by lazy {
+        TextView(this)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,13 +56,14 @@ class MainActivity : AppCompatActivity() {
             Log.e("HelloAR", "Initialization Failed.")
         }
 
-        glView = GLView(this)
-        smartGlView = BXSmartGLView(this)
+        configTextView()
+        glView = GLView(this, textView)
 
         requestCameraPermission(object : PermissionCallback {
             override fun onSuccess() {
-                findViewById<FrameLayout>(R.id.preview).addView(glView, ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT))
-                findViewById<FrameLayout>(R.id.preview).addView(smartGlView, ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT))
+                val frameLayout = findViewById<FrameLayout>(R.id.preview)
+                frameLayout.addView(glView, ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT))
+                frameLayout.addView(textView, ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT))
             }
 
             override fun onFailure() {}
@@ -65,6 +73,14 @@ class MainActivity : AppCompatActivity() {
     private interface PermissionCallback {
         fun onSuccess()
         fun onFailure()
+    }
+
+    private fun configTextView() {
+        textView.textSize = 30f
+        textView.setShadowLayer(1f, -5f, -5f, Color.BLACK)
+        textView.setTextColor(Color.GREEN)
+        textView.typeface = Typeface.DEFAULT_BOLD
+        textView.setText("WGL == COOL")
     }
 
     private val permissionCallbacks = HashMap<Int, PermissionCallback>()
@@ -106,12 +122,12 @@ class MainActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         glView?.onResume()
-        smartGlView?.onResume()
+//        smartGlView?.onResume()
     }
 
     override fun onPause() {
         glView?.onPause()
-        smartGlView?.onPause()
+//        smartGlView?.onPause()
         super.onPause()
     }
 
