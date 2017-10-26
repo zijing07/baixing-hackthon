@@ -11,6 +11,7 @@ package cn.easyar.samples.helloar
 import android.opengl.GLES20
 import android.opengl.GLU
 import android.util.Log
+import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import cn.easyar.*
@@ -180,6 +181,10 @@ open class HelloAR() {
 
             videobg_renderer?.render(frame, viewport)
 
+            textView.post {
+                textView.visibility = View.GONE
+            }
+
             for (targetInstance in frame.targetInstances()) {
                 val status = targetInstance.status()
                 if (status == TargetStatus.Tracked) {
@@ -198,13 +203,14 @@ open class HelloAR() {
 
                     textView.post {
                         val layoutParams = textView.layoutParams as ViewGroup.MarginLayoutParams
-                        layoutParams.leftMargin = windowArray[0].toInt()
-                        layoutParams.topMargin = viewport.data[3] - windowArray[1].toInt()
+                        layoutParams.leftMargin = windowArray[0].toInt() - textView.width / 2
+                        layoutParams.topMargin = viewport.data[3] - windowArray[1].toInt() - textView.height / 2
                         Log.d("ABC", windowArray.joinToString(","))
                         textView.layoutParams = layoutParams
+                        textView.visibility = View.VISIBLE
                     }
 
-                    box_renderer?.render(camera!!.projectionGL(0.2f, 500f), targetInstance.poseGL(), imagetarget.size())
+//                    box_renderer?.render(camera!!.projectionGL(0.2f, 500f), targetInstance.poseGL(), imagetarget.size())
                 }
             }
         } finally {

@@ -81,6 +81,7 @@ class MainActivity : AppCompatActivity() {
         textView.setTextColor(Color.GREEN)
         textView.typeface = Typeface.DEFAULT_BOLD
         textView.setText("WGL == COOL")
+        textView.setLines(1)
     }
 
     private val permissionCallbacks = HashMap<Int, PermissionCallback>()
