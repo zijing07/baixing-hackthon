@@ -24,7 +24,7 @@ import android.view.WindowManager
 import android.widget.FrameLayout
 import android.widget.TextView
 import cn.easyar.Engine
-import cn.easyar.samples.helloar.smartgl.BXSmartGLView
+import cn.easyar.samples.images.fetchImageList
 
 class MainActivity : AppCompatActivity() {
     companion object {
@@ -41,7 +41,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     private var glView: GLView? = null
-//    private var smartGlView: BXSmartGLView? = null
 
     private val textView: TextView by lazy {
         TextView(this)
@@ -68,6 +67,8 @@ class MainActivity : AppCompatActivity() {
 
             override fun onFailure() {}
         })
+
+        fetchImageList()
     }
 
     private interface PermissionCallback {
@@ -123,12 +124,10 @@ class MainActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         glView?.onResume()
-//        smartGlView?.onResume()
     }
 
     override fun onPause() {
         glView?.onPause()
-//        smartGlView?.onPause()
         super.onPause()
     }
 

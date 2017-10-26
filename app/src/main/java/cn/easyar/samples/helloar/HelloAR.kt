@@ -15,7 +15,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import cn.easyar.*
-import fr.arnaudguyon.smartgl.opengl.SmartGLView
 
 open class HelloAR() {
     var camera: CameraDevice? = null
