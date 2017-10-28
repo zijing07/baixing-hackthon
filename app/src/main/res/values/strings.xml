@@ -1,6 +1,13 @@
 <resources>
-<string name="app_name">HelloAR</string>
+    <string name="app_name">HelloAR</string>
 
-<string name="hello_world">Hello world!</string>
-<string name="action_settings">Settings</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="add_new_image">add new image</string>
+
+    <!-- button texts -->
+    <string name="capture">重拍一张</string>
+    <string name="edit">编辑</string>
+    <string name="pic_ok">确认广告位并上传</string>
 </resources>
