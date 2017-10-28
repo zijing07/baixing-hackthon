@@ -10,6 +10,7 @@ package cn.easyar.samples.helloar
 
 import android.Manifest
 import android.annotation.TargetApi
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Color
 import android.os.Build
@@ -20,8 +21,11 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.ViewGroup
 import android.view.WindowManager
+import android.widget.Button
 import android.widget.FrameLayout
 import cn.easyar.Engine
+import cn.easyar.samples.images.AddImageActivity
+import cn.easyar.samples.images.ensureDirExists
 import cn.easyar.samples.images.fetchImageList
 import cn.easyar.samples.widget.ARCanvasView
 
@@ -67,6 +71,11 @@ class MainActivity : AppCompatActivity() {
             override fun onFailure() {}
         })
 
+        findViewById<Button>(R.id.activity_main_button_add).setOnClickListener({
+            startActivity(Intent(this, AddImageActivity::class.java))
+        })
+
+        ensureDirExists()
         fetchImageList()
     }
 
@@ -88,7 +97,12 @@ class MainActivity : AppCompatActivity() {
                 val requestCode = permissionRequestCodeSerial
                 permissionRequestCodeSerial += 1
                 permissionCallbacks.put(requestCode, callback)
-                requestPermissions(arrayOf(Manifest.permission.CAMERA), requestCode)
+                requestPermissions(
+                        arrayOf(
+                                Manifest.permission.CAMERA,
+                                Manifest.permission.READ_EXTERNAL_STORAGE,
+                                Manifest.permission.WRITE_EXTERNAL_STORAGE),
+                        requestCode)
             } else {
                 callback.onSuccess()
             }

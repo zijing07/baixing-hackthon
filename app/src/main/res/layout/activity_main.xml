@@ -7,4 +7,15 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
+    <Button
+        android:id="@+id/activity_main_button_add"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_margin="30dp"
+        android:contentDescription="@string/add_new_image"
+        android:background="@drawable/button_add_ripple"
+        android:elevation="20dp" />
+
 </RelativeLayout>

@@ -1,0 +1,33 @@
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/activity_addimage_image"
+        android:contentDescription="@string/hello_world"
+        android:layout_weight="1"
+        android:layout_width="match_parent"
+        android:layout_height="0dp" />
+
+    <Button
+        android:id="@+id/activity_addimage_capture"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/capture"/>
+
+    <Button
+        android:id="@+id/activity_addimage_edit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/edit"/>
+
+    <Button
+        android:id="@+id/activity_addimage_picok"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/pic_ok"/>
+
+</LinearLayout>
+
