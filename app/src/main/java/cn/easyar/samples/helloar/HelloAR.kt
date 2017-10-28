@@ -10,6 +10,7 @@ package cn.easyar.samples.helloar
 
 import android.opengl.GLES20
 import android.opengl.GLU
+import android.opengl.Matrix
 import android.util.Log
 import android.view.View
 import android.view.ViewGroup
@@ -71,8 +72,9 @@ open class HelloAR() {
         tracker.attachStreamer(streamer)
         loadFromJsonFile(tracker, "targets.json", "argame")
         loadFromJsonFile(tracker, "targets.json", "idback")
-        loadAllFromJsonFile(tracker, "targets2.json")
+//        loadAllFromJsonFile(tracker, "targets2.json")
         loadFromImage(tracker, "namecard.jpg")
+        loadFromImage(tracker, "58.jpg")
         trackers.add(tracker)
 
         return status
@@ -193,12 +195,8 @@ open class HelloAR() {
 
                     val projectionMatrix = camera!!.projectionGL(0.2f, 500f).data
                     val modelViewMatrix = targetInstance.poseGL().data
-                    val viewArray = kotlin.IntArray(4)
-                    val windowArray = FloatArray(4)
 
-                    GLU.gluProject(0f, 0f, 0f,
-                            modelViewMatrix, 0, projectionMatrix, 0,
-                            viewport.data, 0, windowArray, 0)
+                    val windowArray = getScreenCoordinate(RIGHT_BOTTOM(), imagetarget, modelViewMatrix, projectionMatrix)
 
                     textView.post {
                         val layoutParams = textView.layoutParams as ViewGroup.MarginLayoutParams
@@ -209,11 +207,46 @@ open class HelloAR() {
                         textView.visibility = View.VISIBLE
                     }
 
-//                    box_renderer?.render(camera!!.projectionGL(0.2f, 500f), targetInstance.poseGL(), imagetarget.size())
+                    box_renderer?.render(camera!!.projectionGL(0.2f, 500f), targetInstance.poseGL(), imagetarget.size())
                 }
             }
         } finally {
             frame.dispose()
         }
     }
+
+    fun getScreenCoordinate(corner: CORNER, imageTarget: ImageTarget, modelViewMatrix: FloatArray,
+                projectionMatrix: FloatArray): FloatArray {
+        val windowArray = FloatArray(4)
+
+        val (w, h) = imageTarget.size().data
+        var x = w / 2
+        var y = h / 2
+        val z = x / 1000
+
+        when (corner) {
+            is LEFT_TOP -> print (1)
+            is LEFT_BOTTOM -> y *= -1
+            is RIGHT_BOTTOM -> {
+                x *= -1
+                y *= -1
+            }
+            is RIGHT_TOP -> {
+                x *= -1
+            }
+        }
+
+        GLU.gluProject(x, y, z,
+                modelViewMatrix, 0, projectionMatrix, 0,
+                viewport.data, 0, windowArray, 0)
+
+        return windowArray
+    }
 }
+
+sealed class CORNER
+class LEFT_TOP: CORNER()
+class LEFT_BOTTOM: CORNER()
+class RIGHT_TOP: CORNER()
+class RIGHT_BOTTOM: CORNER()
+

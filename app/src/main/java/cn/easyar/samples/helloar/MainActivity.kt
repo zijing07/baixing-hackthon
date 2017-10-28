@@ -81,7 +81,7 @@ class MainActivity : AppCompatActivity() {
         textView.setShadowLayer(1f, -5f, -5f, Color.BLACK)
         textView.setTextColor(Color.GREEN)
         textView.typeface = Typeface.DEFAULT_BOLD
-        textView.setText("WGL == COOL")
+        textView.setText("BAIXING")
         textView.setLines(1)
     }
 
