@@ -77,7 +77,6 @@ class MainActivity : AppCompatActivity() {
         })
 
         ensureDirExists()
-        fetchImageList()
     }
 
     private interface PermissionCallback {
@@ -138,6 +137,8 @@ class MainActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         glView?.onResume()
+
+        fetchImageList(this)
     }
 
     override fun onPause() {

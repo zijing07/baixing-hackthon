@@ -39,7 +39,7 @@ class AddImageActivity: AppCompatActivity() {
             startEdit()
         }
         findViewById<Button>(R.id.activity_addimage_picok).setOnClickListener {
-
+            startUpload()
         }
     }
 
@@ -58,7 +58,7 @@ class AddImageActivity: AppCompatActivity() {
 
     fun startEdit() {
         try {
-            val srcPath = photoFile?.absolutePath ?: return fail("先定图片不存在，再拍一张吧", this::startCameraActivity)
+            val srcPath = photoFile?.absolutePath ?: return fail("选定图片不存在，再拍一张吧", this::startCameraActivity)
             val srcUri = Uri.fromFile(File(srcPath))
             val desPath = srcPath.replace("camera", "targets")
             val desFile = File(desPath)
@@ -75,7 +75,18 @@ class AddImageActivity: AppCompatActivity() {
     }
 
     fun startUpload() {
-        
+        val srcPath = photoFile?.absolutePath ?: return fail("选定图片不存在，再拍一张吧", this::startCameraActivity)
+        val desPath = srcPath.replace("camera", "targets")
+        uploadImage(desPath, success = this::uploadSuccess, fail = this::uploadFail)
+    }
+
+    fun uploadSuccess() {
+        toast("上传成功")
+        finish()
+    }
+
+    fun uploadFail(message: String) {
+        toast("上传失败: ${message}")
     }
 
     fun fail(message: String, foo: () -> Any = this::finish) {
