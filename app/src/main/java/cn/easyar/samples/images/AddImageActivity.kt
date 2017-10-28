@@ -90,7 +90,7 @@ class AddImageActivity: AppCompatActivity() {
     }
 
     fun fail(message: String, foo: () -> Any = this::finish) {
-        toast(message)
+//        toast(message)
         foo()
     }
 
