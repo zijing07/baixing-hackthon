@@ -15,6 +15,7 @@ import android.content.pm.PackageManager
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.view.Menu
@@ -44,6 +45,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     lateinit var glView: GLView
+
+    val handler = Handler()
 
     private val canvasView: ARCanvasView by lazy {
         ARCanvasView(this)
@@ -76,7 +79,7 @@ class MainActivity : AppCompatActivity() {
         })
 
         findViewById<Button>(R.id.activity_main_button_refresh).setOnClickListener({
-            fetchImageList(this, glView.helloAR)
+            fetchImageList(this, glView.helloAR, handler)
         })
 
         ensureDirExists()
@@ -136,7 +139,7 @@ class MainActivity : AppCompatActivity() {
         super.onResume()
         glView.onResume()
 
-        fetchImageList(this, glView.helloAR)
+        fetchImageList(this, glView.helloAR, handler)
     }
 
     override fun onPause() {

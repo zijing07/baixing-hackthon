@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity
 import android.provider.MediaStore
 import android.content.Intent
 import android.net.Uri
+import android.os.Handler
 import android.widget.Button
 import android.widget.ImageView
 import cn.easyar.samples.helloar.R
@@ -24,6 +25,8 @@ class AddImageActivity: AppCompatActivity() {
     lateinit var imageView: ImageView
 
     var photoFile: File? = null
+
+    val handler = Handler()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -81,16 +84,22 @@ class AddImageActivity: AppCompatActivity() {
     }
 
     fun uploadSuccess() {
-//        toast("上传成功")
+        handler.post {
+            toast("上传成功")
+        }
         finish()
     }
 
     fun uploadFail(message: String) {
-        toast("上传失败: ${message}")
+        handler.post {
+            toast("上传失败: ${message}")
+        }
     }
 
     fun fail(message: String, foo: () -> Any = this::finish) {
-//        toast(message)
+        handler.post {
+            toast(message)
+        }
         foo()
     }
 
