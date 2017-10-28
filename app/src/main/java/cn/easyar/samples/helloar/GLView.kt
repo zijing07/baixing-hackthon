@@ -10,9 +10,8 @@ package cn.easyar.samples.helloar
 
 import android.content.Context
 import android.opengl.GLSurfaceView
-import android.util.Log
-import android.widget.TextView
 import cn.easyar.Engine
+import cn.easyar.samples.widget.ARCanvasView
 import javax.microedition.khronos.egl.EGL10
 import javax.microedition.khronos.egl.EGLConfig
 import javax.microedition.khronos.egl.EGLContext
@@ -23,8 +22,8 @@ class GLView : GLSurfaceView {
     val helloAR: HelloAR
 
     private constructor(context: Context): super(context)
-    constructor(context: Context, textView: TextView): this(context) {
-        helloAR.textView = textView
+    constructor(context: Context, canvasView: ARCanvasView): this(context) {
+        helloAR.canvasView = canvasView
     }
 
     init {

@@ -10,12 +10,9 @@ package cn.easyar.samples.helloar
 
 import android.opengl.GLES20
 import android.opengl.GLU
-import android.opengl.Matrix
 import android.util.Log
-import android.view.View
-import android.view.ViewGroup
-import android.widget.TextView
 import cn.easyar.*
+import cn.easyar.samples.widget.ARCanvasView
 
 open class HelloAR() {
     var camera: CameraDevice? = null
@@ -27,7 +24,7 @@ open class HelloAR() {
     var view_size = Vec2I(0, 0)
     var rotation = 0
     var viewport = Vec4I(0, 0, 1280, 720)
-    lateinit var textView: TextView
+    lateinit var canvasView: ARCanvasView
 
     private fun loadFromImage(tracker: ImageTracker, path: String) {
         val target = ImageTarget()
@@ -68,14 +65,17 @@ open class HelloAR() {
         if (!status) {
             return status
         }
-        val tracker = ImageTracker()
-        tracker.attachStreamer(streamer)
-        loadFromJsonFile(tracker, "targets.json", "argame")
-        loadFromJsonFile(tracker, "targets.json", "idback")
+
+        for (i in 0..3) {
+            val tracker = ImageTracker()
+            tracker.attachStreamer(streamer)
+            loadFromJsonFile(tracker, "targets.json", "argame")
+            loadFromJsonFile(tracker, "targets.json", "idback")
 //        loadAllFromJsonFile(tracker, "targets2.json")
-        loadFromImage(tracker, "namecard.jpg")
-        loadFromImage(tracker, "58.jpg")
-        trackers.add(tracker)
+            loadFromImage(tracker, "namecard.jpg")
+            loadFromImage(tracker, "58.jpg")
+            trackers.add(tracker)
+        }
 
         return status
     }
@@ -85,7 +85,7 @@ open class HelloAR() {
             tracker.dispose()
         }
         trackers.clear()
-        box_renderer = null
+        // box_renderer = null
         if (videobg_renderer != null) {
             videobg_renderer!!.dispose()
             videobg_renderer = null
@@ -126,8 +126,8 @@ open class HelloAR() {
             videobg_renderer!!.dispose()
         }
         videobg_renderer = Renderer()
-        box_renderer = BoxRenderer()
-        box_renderer!!.init()
+//        box_renderer = BoxRenderer()
+//        box_renderer!!.init()
     }
 
     fun resizeGL(width: Int, height: Int) {
@@ -182,10 +182,9 @@ open class HelloAR() {
 
             videobg_renderer?.render(frame, viewport)
 
-            textView.post {
-                textView.visibility = View.GONE
+            canvasView.post {
+                canvasView.clearDstPolys()
             }
-
             for (targetInstance in frame.targetInstances()) {
                 val status = targetInstance.status()
                 if (status == TargetStatus.Tracked) {
@@ -196,19 +195,25 @@ open class HelloAR() {
                     val projectionMatrix = camera!!.projectionGL(0.2f, 500f).data
                     val modelViewMatrix = targetInstance.poseGL().data
 
-                    val windowArray = getScreenCoordinate(RIGHT_BOTTOM(), imagetarget, modelViewMatrix, projectionMatrix)
+                    val leftTopArray = getScreenCoordinate(LEFT_TOP(), imagetarget, modelViewMatrix, projectionMatrix)
+                    val rightTopArray = getScreenCoordinate(RIGHT_TOP(), imagetarget, modelViewMatrix, projectionMatrix)
+                    val rightBottomArray = getScreenCoordinate(RIGHT_BOTTOM(), imagetarget, modelViewMatrix, projectionMatrix)
+                    val leftBottomArray = getScreenCoordinate(LEFT_BOTTOM(), imagetarget, modelViewMatrix, projectionMatrix)
 
-                    textView.post {
-                        val layoutParams = textView.layoutParams as ViewGroup.MarginLayoutParams
-                        layoutParams.leftMargin = windowArray[0].toInt() - textView.width / 2
-                        layoutParams.topMargin = viewport.data[3] - windowArray[1].toInt() - textView.height / 2
-                        Log.d("ABC", windowArray.joinToString(","))
-                        textView.layoutParams = layoutParams
-                        textView.visibility = View.VISIBLE
+                    canvasView.post {
+                        canvasView.addDstPoly(floatArrayOf(
+                                leftTopArray[0], viewport.data[3] - leftTopArray[1],
+                                rightTopArray[0], viewport.data[3] - rightTopArray[1],
+                                rightBottomArray[0], viewport.data[3] - rightBottomArray[1],
+                                leftBottomArray[0], viewport.data[3] - leftBottomArray[1]
+                        ))
                     }
 
-                    box_renderer?.render(camera!!.projectionGL(0.2f, 500f), targetInstance.poseGL(), imagetarget.size())
+                    // box_renderer?.render(camera!!.projectionGL(0.2f, 500f), targetInstance.poseGL(), imagetarget.size())
                 }
+            }
+            canvasView.post {
+                canvasView.updateCanvas()
             }
         } finally {
             frame.dispose()
