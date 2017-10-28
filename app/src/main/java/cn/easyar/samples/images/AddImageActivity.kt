@@ -14,6 +14,9 @@ import cn.easyar.samples.helloar.toast
 import com.yalantis.ucrop.UCrop
 import java.io.File
 import java.io.IOException
+import android.support.v4.content.FileProvider
+
+
 
 /**
  * Created by zijing on 28/10/2017
@@ -54,8 +57,11 @@ class AddImageActivity: AppCompatActivity() {
         photoFile = try { createImageFile() } catch (e: IOException) { null }
         photoFile ?: return fail("您没有文件系统权限")
 
-        val photoURI = Uri.fromFile(photoFile)
+        val photoURI = FileProvider.getUriForFile(this,
+                "cn.easyar.samples.helloar.fileprovider", photoFile)
         takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
+        takePictureIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+        // takePictureIntent.setDataAndType(photoURI, "image/*")
         startActivityForResult(takePictureIntent, REQ_TAKE_PICTURE)
     }
 
