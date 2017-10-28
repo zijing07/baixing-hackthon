@@ -17,6 +17,7 @@ import com.liulishuo.filedownloader.BaseDownloadTask
 import com.liulishuo.filedownloader.FileDownloadListener
 import android.R.attr.path
 import android.content.Context
+import cn.easyar.samples.helloar.HelloAR
 import cn.easyar.samples.helloar.toast
 import com.liulishuo.filedownloader.FileDownloader
 import java.net.URLEncoder
@@ -72,25 +73,32 @@ fun createImageFile(): File {
     return image
 }
 
-fun fetchImageList(context: Context) {
+fun fetchImageList(context: Context, helloAR: HelloAR) {
     Thread(Runnable {
         val bucketManager = BucketManager(auth, config)
         val fileListing = bucketManager.listFiles(bucketName, "", "", 100, "")
         fileListing.items.forEach {
             val realPath = "${getTargetDir()}/${it.key}"
             val imageFile = File(realPath)
-//            if (!imageFile.exists()) {
+            if (!imageFile.exists()) {
                 val fileName = URLEncoder.encode(it.key, "utf-8")
-                downloadFile("${filePrefix}${fileName}", context, it.key)
-//            }
+                downloadFile("${filePrefix}${fileName}", context, it.key, helloAR)
+            } else {
+                Log.d(TAG, "added ${it.key}")
+//                context.toast("已添加新的识别对象：${it.key}")
+                helloAR.trackers.forEach {
+                    helloAR.loadFromImage(it, realPath)
+                }
+            }
         }
     }).start()
 }
 
-fun downloadFile(url: String, context: Context, fileName: String) {
+fun downloadFile(url: String, context: Context, fileName: String, helloAR: HelloAR) {
     FileDownloader.setup(context)
+    val path = "${getTargetDir()}/${fileName}"
     FileDownloader.getImpl().create(url)
-            .setPath("${getTargetDir()}/${fileName}")
+            .setPath(path)
             .setListener(object : FileDownloadListener() {
                 override fun pending(task: BaseDownloadTask, soFarBytes: Int, totalBytes: Int) {}
 
@@ -103,6 +111,11 @@ fun downloadFile(url: String, context: Context, fileName: String) {
                 override fun retry(task: BaseDownloadTask?, ex: Throwable?, retryingTimes: Int, soFarBytes: Int) {}
 
                 override fun completed(task: BaseDownloadTask) {
+                    Log.d(TAG, "added ${fileName}")
+//                    context.toast("已添加新的识别对象：${fileName}")
+                    helloAR.trackers.forEach {
+                        helloAR.loadFromImage(it, path)
+                    }
                 }
 
                 override fun paused(task: BaseDownloadTask, soFarBytes: Int, totalBytes: Int) {}

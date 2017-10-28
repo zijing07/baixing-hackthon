@@ -26,7 +26,7 @@ open class HelloAR() {
     var viewport = Vec4I(0, 0, 1280, 720)
     lateinit var canvasView: ARCanvasView
 
-    private fun loadFromImage(tracker: ImageTracker, path: String) {
+    fun loadFromImage(tracker: ImageTracker, path: String) {
         val target = ImageTarget()
         val jstr = """{
   "images" :

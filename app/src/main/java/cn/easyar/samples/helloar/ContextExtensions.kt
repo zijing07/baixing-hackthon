@@ -2,6 +2,7 @@ package cn.easyar.samples.helloar
 
 import android.content.Context
 import android.graphics.BitmapFactory
+import android.os.Handler
 import android.widget.ImageView
 import android.widget.Toast
 

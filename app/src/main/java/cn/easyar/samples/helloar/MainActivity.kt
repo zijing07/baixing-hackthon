@@ -43,7 +43,7 @@ class MainActivity : AppCompatActivity() {
         private val key = "zv8SLRfY1dKZoGicYNAxdiENkQRuFf3d3mJB1TNQsFOA3PPhoEzoDICfdG9K42vq2wrcKX56So9bIra2AN2kat2FiDx2vdMXoebDbl6pAvtv1rM8P2YKF6DDvIAIvov4n26tKWVtVEyIN0rY1dhaDsBIycBSxlthGRrCYdw5uZaHS71j5M7MZbSqkq1BXllIjCJtMlVL"
     }
 
-    private var glView: GLView? = null
+    lateinit var glView: GLView
 
     private val canvasView: ARCanvasView by lazy {
         ARCanvasView(this)
@@ -73,6 +73,10 @@ class MainActivity : AppCompatActivity() {
 
         findViewById<Button>(R.id.activity_main_button_add).setOnClickListener({
             startActivity(Intent(this, AddImageActivity::class.java))
+        })
+
+        findViewById<Button>(R.id.activity_main_button_refresh).setOnClickListener({
+            fetchImageList(this, glView.helloAR)
         })
 
         ensureDirExists()
@@ -130,13 +134,13 @@ class MainActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        glView?.onResume()
+        glView.onResume()
 
-        fetchImageList(this)
+        fetchImageList(this, glView.helloAR)
     }
 
     override fun onPause() {
-        glView?.onPause()
+        glView.onPause()
         super.onPause()
     }
 

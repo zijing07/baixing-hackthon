@@ -81,7 +81,7 @@ class AddImageActivity: AppCompatActivity() {
     }
 
     fun uploadSuccess() {
-        toast("上传成功")
+//        toast("上传成功")
         finish()
     }
 
