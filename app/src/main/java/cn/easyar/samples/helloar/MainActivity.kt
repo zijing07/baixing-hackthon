@@ -13,7 +13,6 @@ import android.annotation.TargetApi
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Color
-import android.graphics.Typeface
 import android.os.Build
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
@@ -24,11 +23,11 @@ import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.Button
 import android.widget.FrameLayout
-import android.widget.TextView
 import cn.easyar.Engine
 import cn.easyar.samples.images.AddImageActivity
 import cn.easyar.samples.images.ensureDirExists
 import cn.easyar.samples.images.fetchImageList
+import cn.easyar.samples.widget.ARCanvasView
 
 class MainActivity : AppCompatActivity() {
     companion object {
@@ -46,8 +45,8 @@ class MainActivity : AppCompatActivity() {
 
     private var glView: GLView? = null
 
-    private val textView: TextView by lazy {
-        TextView(this)
+    private val canvasView: ARCanvasView by lazy {
+        ARCanvasView(this)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -59,14 +58,14 @@ class MainActivity : AppCompatActivity() {
             Log.e("HelloAR", "Initialization Failed.")
         }
 
-        configTextView()
-        glView = GLView(this, textView)
+        configCanvasView()
+        glView = GLView(this, canvasView)
 
         requestCameraPermission(object : PermissionCallback {
             override fun onSuccess() {
                 val frameLayout = findViewById<FrameLayout>(R.id.preview)
                 frameLayout.addView(glView, ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT))
-                frameLayout.addView(textView, ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT))
+                frameLayout.addView(canvasView, ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT))
             }
 
             override fun onFailure() {}
@@ -84,13 +83,8 @@ class MainActivity : AppCompatActivity() {
         fun onFailure()
     }
 
-    private fun configTextView() {
-        textView.textSize = 30f
-        textView.setShadowLayer(1f, -5f, -5f, Color.BLACK)
-        textView.setTextColor(Color.GREEN)
-        textView.typeface = Typeface.DEFAULT_BOLD
-        textView.setText("BAIXING")
-        textView.setLines(1)
+    private fun configCanvasView() {
+        canvasView.setBackgroundColor(Color.TRANSPARENT);
     }
 
     private val permissionCallbacks = HashMap<Int, PermissionCallback>()
